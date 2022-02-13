@@ -1,12 +1,17 @@
+import '../api/pdf_api.dart';
+import '../api/pdf_invoice_api.dart';
 import '../auth/auth_util.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../homepage/homepage_widget.dart';
 import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../model/customer.dart';
+import '../model/invoice.dart';
+import '../model/supplier.dart';
 
 class SucessoWidget extends StatefulWidget {
   const SucessoWidget({
@@ -196,8 +201,83 @@ class _SucessoWidgetState extends State<SucessoWidget> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     FFButtonWidget(
-                      onPressed: () {
+                      onPressed: () async {
                         print('Button pressed ...');
+                        final date = DateTime.now();
+                        final dueDate = date.add(Duration(days: 7));
+
+                        final invoice = Invoice(
+                          supplier: Supplier(
+                            name: 'Sarah Field',
+                            address: 'Sarah Street 9, Beijing, China',
+                            paymentInfo: 'https://paypal.me/sarahfieldzz',
+                          ),
+                          customer: Customer(
+                            name: 'Apple Inc.',
+                            address: 'Apple Street, Cupertino, CA 95014',
+                          ),
+                          info: InvoiceInfo(
+                            date: date,
+                            dueDate: dueDate,
+                            description: 'My description...',
+                            number: '${DateTime.now().year}-9999',
+                          ),
+                          items: [
+                            InvoiceItem(
+                              description: 'Coffee',
+                              date: DateTime.now(),
+                              quantity: 3,
+                              vat: 0.19,
+                              unitPrice: 5.99,
+                            ),
+                            InvoiceItem(
+                              description: 'Water',
+                              date: DateTime.now(),
+                              quantity: 8,
+                              vat: 0.19,
+                              unitPrice: 0.99,
+                            ),
+                            InvoiceItem(
+                              description: 'Orange',
+                              date: DateTime.now(),
+                              quantity: 3,
+                              vat: 0.19,
+                              unitPrice: 2.99,
+                            ),
+                            InvoiceItem(
+                              description: 'Apple',
+                              date: DateTime.now(),
+                              quantity: 8,
+                              vat: 0.19,
+                              unitPrice: 3.99,
+                            ),
+                            InvoiceItem(
+                              description: 'Mango',
+                              date: DateTime.now(),
+                              quantity: 1,
+                              vat: 0.19,
+                              unitPrice: 1.59,
+                            ),
+                            InvoiceItem(
+                              description: 'Blue Berries',
+                              date: DateTime.now(),
+                              quantity: 5,
+                              vat: 0.19,
+                              unitPrice: 0.99,
+                            ),
+                            InvoiceItem(
+                              description: 'Lemon',
+                              date: DateTime.now(),
+                              quantity: 4,
+                              vat: 0.19,
+                              unitPrice: 1.29,
+                            ),
+                          ],
+                        );
+
+                        final pdfFile = await PdfInvoiceApi.generate(invoice);
+
+                        PdfApi.openFile(pdfFile);
                       },
                       text: 'BAIXAR RECIBO',
                       options: FFButtonOptions(
